@@ -1,0 +1,60 @@
+version: "3.2"
+
+services:
+  pdns-server:
+    image: psitrax/powerdns
+    ports:
+     - target: 53
+       published: 53
+       protocol: tcp
+       mode: host
+     - target: 53
+       published: 53
+       protocol: udp
+       mode: host
+    command: --master=yes --slave=no --api=yes --api-key=${PDNS_API_KEY} --local-address=0.0.0.0 --webserver-address=0.0.0.0 --webserver-allow-from=0.0.0.0/0 --disable-axfr=no --allow-axfr-ips=${PDNS_AXFR_IPS} --also-notify=${PDNS_AXFR_IPS}
+    environment:
+      - MYSQL_HOST=pdns-mysql
+      - MYSQL_DB=pdns
+      - MYSQL_USER=pdns
+      - MYSQL_PASS=password
+      - PDNS_API_KEY=asdf
+    links:
+      - pdns-mysql
+
+  pdns-mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=pdns
+      - MYSQL_USER=pdns
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=password
+    volumes:
+     - ./data/powerdns-db:/var/lib/mysql
+
+  dns-ui:
+    build: .
+    ports:
+      - 8888:80/tcp
+    links:
+      - dns-ui-db
+    environment:
+      - ADMIN_USER=admin
+      - ADMIN_PASS=password
+      - POSTGRES_HOST=dns-ui-db
+      - POSTGRES_DB=pdns
+      - POSTGRES_USER=pdns
+      - POSTGRES_PASSWORD=password
+      - PDNS_API_HOST=pdns-server
+      - PDNS_API_KEY=${PDNS_API_KEY}
+    volumes:
+     - ./data:/data
+
+  dns-ui-db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=pdns
+      - POSTGRES_USER=pdns
+      - POSTGRES_PASSWORD=password
+    volumes:
+     - ./data/dns-ui-db:/var/lib/mysql
