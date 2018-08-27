@@ -12,13 +12,14 @@ services:
        published: 53
        protocol: udp
        mode: host
-    command: --master=yes --slave=no --api=yes --api-key=${PDNS_API_KEY} --local-address=0.0.0.0 --webserver-address=0.0.0.0 --webserver-allow-from=0.0.0.0/0 --disable-axfr=no --allow-axfr-ips=${PDNS_AXFR_IPS} --also-notify=${PDNS_AXFR_IPS}
+    command: --master=yes --slave=no --api=yes --api-key="${PDNS_API_KEY}" --local-address=0.0.0.0 --webserver-address=0.0.0.0 --webserver-allow-from=0.0.0.0/0 --disable-axfr=no --allow-axfr-ips="${PDNS_AXFR_IPS}" --also-notify="${PDNS_AXFR_IPS}"
     environment:
       - MYSQL_HOST=pdns-mysql
       - MYSQL_DB=pdns
       - MYSQL_USER=pdns
       - MYSQL_PASS=password
-      - PDNS_API_KEY=asdf
+      - PDNS_API_KEY=${PDNS_API_KEY}
+      - PDNS_AXFR_IPS=${PDNS_AXFR_IPS}
     links:
       - pdns-mysql
 
@@ -57,4 +58,4 @@ services:
       - POSTGRES_USER=pdns
       - POSTGRES_PASSWORD=password
     volumes:
-     - ./data/dns-ui-db:/var/lib/mysql
+     - ./data/dns-ui-db:/var/lib/postgresql/data
