@@ -11,14 +11,14 @@ sed -i "s/\${PDNS_API_KEY}/${PDNS_API_KEY}/g" /var/www/config/config.ini
 
 mkdir -p /data
 
+while ! nc -z "$POSTGRES_HOST" 5432; do
+	echo "Waiting for database..."
+	sleep 1
+done
+
 if [ ! -f /data/htpasswd ]; then
 
 	echo "Creating admin user..."
-
-	while ! nc -z "$POSTGRES_HOST" 5432; do
-		echo "Waiting for database..."
-		sleep 1
-	done
 
 	# trigger tables to be created
 	php init.php >/dev/null

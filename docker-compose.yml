@@ -41,7 +41,7 @@ services:
       - dns-ui-db
     environment:
       - ADMIN_USER=admin
-      - ADMIN_PASS=password
+      - ADMIN_PASSWORD=password
       - POSTGRES_HOST=dns-ui-db
       - POSTGRES_DB=pdns
       - POSTGRES_USER=pdns
