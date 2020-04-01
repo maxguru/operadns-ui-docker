@@ -17,7 +17,7 @@ RUN docker-php-ext-install pdo pdo_pgsql pgsql json ldap curl mbstring intl
 
 RUN cd /var/www \
 && rm -rf html \
-&& curl -L -o dns-ui.tar.gz https://github.com/operasoftware/dns-ui/archive/master.tar.gz \
+&& curl -L -o dns-ui.tar.gz https://github.com/operasoftware/dns-ui/archive/v0.2.6.tar.gz \
 && tar --strip-components=1 -zxvf dns-ui.tar.gz \
 && rm dns-ui.tar.gz \
 && ln -s public_html html \
