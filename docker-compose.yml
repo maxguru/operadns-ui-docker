@@ -35,6 +35,7 @@ services:
 
   dns-ui:
     build: .
+    image: maxguru/operadns-ui-docker
     ports:
       - 8888:80/tcp
     links:
